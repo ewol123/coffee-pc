@@ -8,8 +8,15 @@ using System.Windows;
 
 namespace coffee_pc.ViewModels
 {
-    public class ShellViewModel : Screen
+    public class ShellViewModel : Conductor<object>
     {
+
+        public ShellViewModel()
+        {
+            ActivateItem(new LoginViewModel());
+
+        }
+
 
         public String email { get; set; }
         public String password { get; set; }
@@ -31,8 +38,7 @@ namespace coffee_pc.ViewModels
 
             else App.Current.MainWindow.WindowState = WindowState.Maximized;
         }
-
-
+       
         public void drag() {
            App.Current.MainWindow.DragMove();
         }
