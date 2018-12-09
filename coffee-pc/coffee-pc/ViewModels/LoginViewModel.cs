@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using coffee_pc.Data;
+using coffee_pc.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +35,9 @@ namespace coffee_pc.ViewModels
      
 
 
-        public void Login() {
-            var response = loginRepo.Login(Email,Password);
-            System.Diagnostics.Debug.WriteLine(response);
+        public async Task Login() {
+            LoginResponse response = await loginRepo.Login(Email,Password);
+            System.Diagnostics.Debug.WriteLine(response.access_token);
         }
 
     }

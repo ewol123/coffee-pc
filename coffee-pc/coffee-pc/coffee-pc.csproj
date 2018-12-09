@@ -86,6 +86,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\LoginRepository.cs" />
+    <Compile Include="Models\LoginResponse.cs" />
     <Compile Include="Service\MainService.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -124,9 +125,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>

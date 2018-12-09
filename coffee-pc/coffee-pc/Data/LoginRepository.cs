@@ -1,4 +1,5 @@
-﻿using coffee_pc.Service;
+﻿using coffee_pc.Models;
+using coffee_pc.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace coffee_pc.Data
 
         MainService ms = new MainService();
 
-        public Task<String> Login(String email, String password) {
+        public async Task<LoginResponse> Login(String email, String password) {
 
-            var res = ms.RequestLoginAsync(email, password);
+            LoginResponse res = await ms.RequestLoginAsync(email, password);
 
             return res;
 
