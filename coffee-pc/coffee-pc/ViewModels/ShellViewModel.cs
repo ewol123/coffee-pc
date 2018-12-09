@@ -40,8 +40,15 @@ namespace coffee_pc.ViewModels
         }
        
         public void drag() {
-           App.Current.MainWindow.DragMove();
-        }
+            try
+            {
+                App.Current.MainWindow.DragMove();
+            }
+            catch (Exception e)
+            {
+                
+            }
+            }
 
     }
 }
