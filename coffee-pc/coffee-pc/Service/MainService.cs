@@ -20,9 +20,6 @@ namespace coffee_pc.Service
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine(email);
-                System.Diagnostics.Debug.WriteLine(password);
-
                 LoginResponse res = await BASE_URL
                .AppendPathSegment("/oauth2/token")
                .WithHeaders(new { Accept = "application/json", Content_Type = "application/x-www-form-urlencoded" }).PostUrlEncodedAsync(new
@@ -32,6 +29,30 @@ namespace coffee_pc.Service
                    grant_type = "password",
                    client_id = "24e5a184d2b1488c8dc97587625260fb"
                }).ReceiveJson<LoginResponse>();
+
+                return res;
+            }
+            catch (FlurlHttpException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+
+        public async Task<String> RequestRegisterAsync(String email, String password, String confirmPassword)
+        {
+            try
+            {
+
+                String res = await BASE_URL
+               .AppendPathSegment("/api/accounts/create")
+               .WithHeaders(new { Accept = "application/json", Content_Type = "application/json" }).PostJsonAsync(new
+               {
+                   Email = email,
+                   Password = password,
+                   ConfirmPassword = confirmPassword
+               }).ReceiveJson();
 
                 return res;
             }

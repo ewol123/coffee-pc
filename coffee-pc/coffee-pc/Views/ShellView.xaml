@@ -55,18 +55,15 @@
                 x:Name="minimize_program" ToolTip="Minimize">
                     <materialDesign:PackIcon Kind="WindowMinimize"  />
                 </Button>
+      
+        </Grid>
 
-              
-            </Grid>
 
-           
-          
-         
 
-            <ContentControl Grid.Row="1" Grid.Column="0"
+        <ContentControl Grid.Row="1" Grid.Column="0"
                         x:Name="ActiveItem"/>
 
         </Grid>
 
-      
+
 </Window>
