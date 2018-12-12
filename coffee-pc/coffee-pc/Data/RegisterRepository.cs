@@ -13,10 +13,10 @@ namespace coffee_pc.Data
 
         MainService ms = new MainService();
 
-        public async Task<String> Register(String email, String password, String confirmPassword)
+        public async Task<bool> Register(String email, String password, String confirmPassword)
         {
 
-            String res = await ms.RequestRegisterAsync(email, password,confirmPassword);
+            bool res = await ms.RequestRegisterAsync(email, password,confirmPassword);
 
             return res;
 

@@ -53,10 +53,30 @@ namespace coffee_pc.ViewModels
         }
 
         public async Task Login() {
-            IsDialogOpen = true;
-            LoginResponse response = await loginRepo.Login(Email,Password);
-            IsDialogOpen = false;
-            System.Diagnostics.Debug.WriteLine(response.access_token);
+
+            if (Email == null || Password == null)
+            {
+                Toast.ProvideToast().ShowWarning("Email and password can't be empty");
+            }
+            else
+            {
+                IsDialogOpen = true;
+                LoginResponse response = await loginRepo.Login(Email, Password);
+                IsDialogOpen = false;
+
+
+                if (response == null)
+                {
+                    Toast.ProvideToast().ShowError("Error while authenticating, please try again");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(response.access_token);
+                    //TODO: save token
+                    //ActivateItem(DashboardViewModel);
+                }
+            }
+
         }
     }
 }

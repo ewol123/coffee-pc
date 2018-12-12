@@ -20,11 +20,6 @@ namespace coffee_pc.ViewModels
             ActivateItem(new LoginViewModel());
 
         }
-       
-        
-        public String email { get; set; }
-        public String password { get; set; }
-
 
         public void close_program() {
             TryClose();

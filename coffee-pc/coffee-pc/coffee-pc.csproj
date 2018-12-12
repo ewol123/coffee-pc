@@ -135,7 +135,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Resource Include="App.config">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

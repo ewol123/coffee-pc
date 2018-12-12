@@ -1,15 +1,19 @@
 ﻿using Caliburn.Micro;
 using coffee_pc.Data;
+using coffee_pc.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace coffee_pc.ViewModels
 {
     class RegisterViewModel: Screen
     {
+        Notifier notify;
         RegisterRepository registerRepo = new RegisterRepository();
         private string _email;
         private bool _IsRegisterDialogOpen;
@@ -23,6 +27,7 @@ namespace coffee_pc.ViewModels
 
         public RegisterViewModel()
         {
+            notify = Toast.ProvideToast();
         }
 
         public string Email
@@ -43,20 +48,44 @@ namespace coffee_pc.ViewModels
 
 
         public async Task<String> Register() {
-            IsRegisterDialogOpen = true;
-            if (Password != ConfirmPassword) {
-                IsRegisterDialogOpen = false;
+           
+
+            if (Password == null) {
+                notify.ShowWarning("Password can't be empty");
                 return null;
             }
-            var addr = new System.Net.Mail.MailAddress(Email);
-            if (addr.Address != Email) {
-                IsRegisterDialogOpen = false;
+
+            if (Password != ConfirmPassword) {
+                notify.ShowWarning("Passwords don't match");
                 return null;
-            } 
-            string response = await registerRepo.Register(Email, Password, ConfirmPassword);
+            }
+
+            if (Email == null) {
+                notify.ShowWarning("Email can't be empty");
+                return null;
+            }
+
+            try {
+                var addr = new System.Net.Mail.MailAddress(Email);
+            }
+            catch (Exception e ) {
+                notify.ShowWarning("Email is not valid");
+                return null;
+            }
+
+            IsRegisterDialogOpen = true;
+            bool response = await registerRepo.Register(Email, Password, ConfirmPassword);
             IsRegisterDialogOpen = false;
-            System.Diagnostics.Debug.WriteLine(response);
-            return response;
+            if (!response)
+            {
+                notify.ShowError("Error, please try again");
+            }
+            else {
+                ActivateLogin();
+                notify.ShowSuccess("Registration successful, please confirm email");
+            }
+           
+            return null;
         }
 
     }

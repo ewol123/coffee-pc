@@ -40,26 +40,26 @@ namespace coffee_pc.Service
         }
 
 
-        public async Task<String> RequestRegisterAsync(String email, String password, String confirmPassword)
+        public async Task<bool> RequestRegisterAsync(String email, String password, String confirmPassword)
         {
             try
             {
 
-                String res = await BASE_URL
+                var res = await BASE_URL
                .AppendPathSegment("/api/accounts/create")
                .WithHeaders(new { Accept = "application/json", Content_Type = "application/json" }).PostJsonAsync(new
                {
                    Email = email,
                    Password = password,
                    ConfirmPassword = confirmPassword
-               }).ReceiveJson();
-
-                return res;
+               });
+                
+                return res.IsSuccessStatusCode;
             }
             catch (FlurlHttpException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex);
-                return null;
+                return false;
             }
         }
 
