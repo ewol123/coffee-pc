@@ -12,13 +12,13 @@ namespace coffee_pc.ViewModels
 {
     public class ShellViewModel : Conductor<object>
     {
-
-      
-
         public ShellViewModel()
         {
-            ActivateItem(new LoginViewModel());
-
+            String token = Properties.Settings.Default.token;
+            if (token == "")
+                ActivateItem(new LoginViewModel());
+            else
+                ActivateItem(new DashboardViewModel());
         }
 
         public void close_program() {

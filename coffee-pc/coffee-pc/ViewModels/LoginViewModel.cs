@@ -49,7 +49,11 @@ namespace coffee_pc.ViewModels
         public void ActivateRegister() {
             var parentConductor = (Conductor<object>)(Parent);
             parentConductor.ActivateItem(new RegisterViewModel());
-            
+        }
+
+        public void ActivateDashboard() {
+            var parentConductor = (Conductor<object>)(Parent);
+            parentConductor.ActivateItem(new DashboardViewModel());
         }
 
         public async Task Login() {
@@ -72,8 +76,9 @@ namespace coffee_pc.ViewModels
                 else
                 {
                     System.Diagnostics.Debug.WriteLine(response.access_token);
-                    //TODO: save token
-                    //ActivateItem(DashboardViewModel);
+                    Properties.Settings.Default.token = response.access_token;
+                    Properties.Settings.Default.Save();
+                    ActivateDashboard();
                 }
             }
 
