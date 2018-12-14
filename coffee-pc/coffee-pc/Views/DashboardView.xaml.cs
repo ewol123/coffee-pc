@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using coffee_pc.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,14 +22,11 @@ namespace coffee_pc.Views
     /// </summary>
     public partial class DashboardView : UserControl
     {
+
         public DashboardView()
         {
             InitializeComponent();
         }
 
-        private void ButtonOpenIsVisible_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

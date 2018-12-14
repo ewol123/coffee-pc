@@ -16,11 +16,11 @@ namespace coffee_pc.Service
         const String BASE_URL = "http://localhost:5819";
 
 
-        public async Task<LoginResponse> RequestLoginAsync(String email, String password)
+        public async Task<LoginResponseModel> RequestLoginAsync(String email, String password)
         {
             try
             {
-                LoginResponse res = await BASE_URL
+                LoginResponseModel res = await BASE_URL
                .AppendPathSegment("/oauth2/token")
                .WithHeaders(new { Accept = "application/json", Content_Type = "application/x-www-form-urlencoded" }).PostUrlEncodedAsync(new
                {
@@ -28,7 +28,7 @@ namespace coffee_pc.Service
                    password = password,
                    grant_type = "password",
                    client_id = "24e5a184d2b1488c8dc97587625260fb"
-               }).ReceiveJson<LoginResponse>();
+               }).ReceiveJson<LoginResponseModel>();
 
                 return res;
             }

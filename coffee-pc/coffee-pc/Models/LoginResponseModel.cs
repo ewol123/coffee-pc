@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class LoginResponse
+    class LoginResponseModel
     {
         public String access_token { get; set; }
         public String token_type { get; set; }  

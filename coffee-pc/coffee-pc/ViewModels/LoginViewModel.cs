@@ -65,7 +65,7 @@ namespace coffee_pc.ViewModels
             else
             {
                 IsDialogOpen = true;
-                LoginResponse response = await loginRepo.Login(Email, Password);
+                LoginResponseModel response = await loginRepo.Login(Email, Password);
                 IsDialogOpen = false;
 
 

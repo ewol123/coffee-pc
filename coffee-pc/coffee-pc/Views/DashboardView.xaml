@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:ie="http://schemas.microsoft.com/expression/2010/interactions"   
              xmlns:local="clr-namespace:coffee_pc.Views"
              mc:Ignorable="d" 
              xmlns:cal="http://www.caliburnproject.org"
@@ -17,7 +18,7 @@
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="GridMain">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="50"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="25"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="StackPanelMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
@@ -40,11 +41,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="GridMain">
-                <EasingDoubleKeyFrame KeyTime="0" Value="50"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="StackPanelMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="250"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="25"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
@@ -66,6 +63,7 @@
             <BeginStoryboard x:Name="CloseMenu_BeginStoryboard" Storyboard="{StaticResource CloseMenu}"/>
         </EventTrigger>
     </UserControl.Triggers>
+ 
     <Grid>
         <StackPanel x:Name="StackPanelMenu" Width="250" HorizontalAlignment="Left" Margin="-250 0 0 0" RenderTransformOrigin="0.5,0.5">
             <StackPanel.RenderTransform>
@@ -108,7 +106,7 @@
                         <TextBlock Text="Logout" Margin="10" VerticalAlignment="Center"/>
                     </StackPanel>
                 </ListViewItem>
-          
+
             </ListView>
         </StackPanel>
         <Grid x:Name="GridMain" Background="#FFFBFBFB" RenderTransformOrigin="0.5,0.5">
@@ -120,14 +118,11 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
-       
+
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="7*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -138,13 +133,128 @@
                 <Button
                     cal:Message.Attach="[Event Click] = [Action ButtonClose]"
                     x:Name="ButtonCloseIsVisible" Visibility="{Binding CloseVisible}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
-                    <materialDesign:PackIcon Kind="Menu" Foreground="#FF3580BF"/>
+                    <materialDesign:PackIcon Kind="ArrowLeft" Foreground="#FF3580BF"/>
                 </Button>
                 <Button 
                     cal:Message.Attach="[Event Click] = [Action ButtonOpen]"
                     x:Name="ButtonOpenIsVisible" Visibility="{Binding OpenVisible}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
                     <materialDesign:PackIcon Kind="Menu" Foreground="#FF3580BF"/>
                 </Button>
+                <Button 
+                    x:Name="DummyDataAdd" Visibility="{Binding OpenVisible}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5">
+                    <materialDesign:PackIcon Kind="Add" Foreground="#FF3580BF"/>
+                </Button>
+
+
+                <ListView SelectedItem="{Binding Path=SelectedOrder, Mode=OneWayToSource}" x:Name="OrderList" Margin="10" Grid.Row="1" VerticalAlignment="Top"  Grid.Column="0" Grid.ColumnSpan="3"  HorizontalContentAlignment="Stretch">
+                    <ListView.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ListView.RenderTransform>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card x:Name="OrderListItem">
+                                <materialDesign:Card.RenderTransform>
+                                    <TranslateTransform/>
+                                </materialDesign:Card.RenderTransform>
+
+                                <materialDesign:Card.Triggers>
+                                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     Duration="00:00:02"
+                                                     From="0"
+                                                     To="1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </materialDesign:Card.Triggers>
+
+                                <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0"  Style="{StaticResource MaterialDesignToolButton}"
+                                            cal:Message.Attach="[Event Click] = [Action CompletedBtn]"
+                                          ToolTip="Completed">
+                                    <materialDesign:PackIcon Kind="Check" Height="24" Width="24" />
+                                     
+
+                                    </Button>
+
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="6*"/>
+                                        <ColumnDefinition Width="11*"/>
+                                    </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding TableNum}" FontWeight="Bold" FontSize="70" Grid.RowSpan="2" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Payed}" Grid.Row="0" Grid.Column="1"  FontSize="30"/>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding PaymentMethod}" Grid.Row="1" Grid.Column="1"  FontSize="30"/>
+
+                                    </Grid>
+
+                                <StackPanel VerticalAlignment="Top" Grid.Column="2">
+                                    <Expander
+                                        HorizontalAlignment="Stretch"
+                                        Header="Check ordered products...">
+                                        <StackPanel
+                                          Orientation="Vertical"
+                                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                         >
+
+                                            <ListView ItemsSource="{Binding Products}" HorizontalContentAlignment="Stretch">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                        <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="3*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="2*"/>
+                                                            <ColumnDefinition Width="2*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="0" Text="{Binding Name}" FontWeight="Bold" FontSize="20"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="1" Text="quantity:" FontStyle="Italic"/>
+                                                                <TextBlock Margin="10,1,1,1" VerticalAlignment="Center" Grid.Column="2" Text="{Binding Quantity}" FontWeight="Bold" FontSize="20"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" Text="{Binding Price}" FontWeight="Bold" FontSize="25"/>
+                                                        </Grid>
+                                                        </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </StackPanel>
+                                    </Expander>
+                                </StackPanel>
+
+
+                                <TextBlock VerticalAlignment="Center" Grid.Column="3" FontWeight="Bold" FontSize="50" >$25</TextBlock>
+                                <Button Grid.Column="5"  Style="{StaticResource MaterialDesignToolButton}"
+                                            cal:Message.Attach="[Event Click] = [Action RefusedBtn]"
+                            
+                                        ToolTip="Refused">
+                                    <materialDesign:PackIcon Kind="DeleteForever" Height="24" Width="24" />
+                                      
+                                    </Button>
+                            </Grid>
+                        </materialDesign:Card>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+               
             </Grid>
         </Grid>
     </Grid>

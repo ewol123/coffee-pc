@@ -13,9 +13,9 @@ namespace coffee_pc.Data
 
         MainService ms = new MainService();
 
-        public async Task<LoginResponse> Login(String email, String password) {
+        public async Task<LoginResponseModel> Login(String email, String password) {
 
-            LoginResponse res = await ms.RequestLoginAsync(email, password);
+            LoginResponseModel res = await ms.RequestLoginAsync(email, password);
 
             return res;
 
