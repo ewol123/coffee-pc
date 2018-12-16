@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using coffee_pc.Models;
 using Flurl;
 using Flurl.Http;
@@ -14,8 +15,8 @@ namespace coffee_pc.Service
     class MainService
     {
         const String BASE_URL = "http://localhost:5819";
-
-
+        String token = Properties.Settings.Default.token;
+        String clientId = Properties.Settings.Default.clientId;
         public async Task<LoginResponseModel> RequestLoginAsync(String email, String password)
         {
             try
@@ -27,7 +28,7 @@ namespace coffee_pc.Service
                    username = email,
                    password = password,
                    grant_type = "password",
-                   client_id = "24e5a184d2b1488c8dc97587625260fb"
+                   client_id = clientId
                }).ReceiveJson<LoginResponseModel>();
 
                 return res;
@@ -61,6 +62,30 @@ namespace coffee_pc.Service
                 System.Diagnostics.Debug.WriteLine(ex);
                 return false;
             }
+        }
+
+        public async Task<List<OrdersResponseModel>> GetPlacedOrders() {
+
+            try
+            {
+                System.Diagnostics.Debug.WriteLine(token);
+                var res = await BASE_URL
+                    .AppendPathSegment("/api/orders/placedOrders")
+                    .WithOAuthBearerToken(token)
+                    .GetAsync()
+                    .ReceiveJson<List<OrdersResponseModel>>(); ;
+
+                System.Diagnostics.Debug.WriteLine("response:", res);
+                return res;
+             }
+
+            catch (FlurlHttpException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return null;
+            }
+
+
         }
 
     }

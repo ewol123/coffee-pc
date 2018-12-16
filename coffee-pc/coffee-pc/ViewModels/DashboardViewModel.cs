@@ -1,5 +1,8 @@
 ﻿using Caliburn.Micro;
+using coffee_pc.Data;
 using coffee_pc.Models;
+using coffee_pc.Services;
+using coffee_pc.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +18,38 @@ namespace coffee_pc.ViewModels
     {
         private Visibility _closeVisible = Visibility.Collapsed;
         private Visibility _openVisible;
-        private BindableCollection<OrdersModel> _orders = new BindableCollection<OrdersModel>();
-        private OrdersModel _selectedOrder;
-
+        private BindableCollection<OrdersResponseModel> _orders = new BindableCollection<OrdersResponseModel>();
+        private OrdersResponseModel _selectedOrder;
+        private DashboardRepository dashboardRepo = new DashboardRepository();
+        private bool _isDialogOpen;
+        private TableWatcher watcher = new TableWatcher();
 
         public DashboardViewModel()
         {
-            OrderList.Add(new OrdersModel { TableNum=1,Payed="Payed",PaymentMethod="PayPal", Price="$25", Products = new BindableCollection<OrderedProductsModel> { new OrderedProductsModel { Name = "Americano", Quantity = 3, Price = "$5" } } });
-            OrderList.Add(new OrdersModel { TableNum = 11, Payed = "Not Payed", PaymentMethod = "Cash", Price = "$15", Products = new BindableCollection<OrderedProductsModel> { new OrderedProductsModel { Name = "Americano", Quantity = 3, Price = "$5" } } });
+            GetOrders();
+            var client = new SignalRMasterClient("http://localhost:5819/signalr",()=>GetOrders());
         }
 
+        public async Task GetOrders()
+        {
+            System.Diagnostics.Debug.WriteLine("BuildViewModelAsync");
+            //IsDialogOpen = true;
+            List<OrdersResponseModel> Orders = await dashboardRepo.GetOrders();
+            _orders.Clear();
+            foreach (var o in Orders)
+            {
+                _orders.Add(o);
+            }
+            //IsDialogOpen = false;
+        }
 
-        public OrdersModel SelectedOrder
+        public bool IsDialogOpen
+        {
+            get => _isDialogOpen;
+            set => Set(ref _isDialogOpen, value);
+        }
+
+        public OrdersResponseModel SelectedOrder
         {
             get { return _selectedOrder; }
             set
@@ -58,7 +81,7 @@ namespace coffee_pc.ViewModels
             }
         }
 
-        public BindableCollection<OrdersModel> OrderList
+        public BindableCollection<OrdersResponseModel> OrderList
         {
             get { return _orders; }
             set
@@ -95,28 +118,17 @@ namespace coffee_pc.ViewModels
 
             if (SelectedOrder == null) return;
 
-            OrderList.Remove(OrderList.Where(ol => ol.TableNum == SelectedOrder.TableNum).Single());
         }
 
         public void RefusedBtn() {
             if (SelectedOrder == null) return;
 
-            OrderList.Remove(OrderList.Where(ol => ol.TableNum == SelectedOrder.TableNum).Single());
 
 
         }
 
 
         public void DummyDataAdd() {
-
-            var vmi = new BindableCollection<OrderedProductsModel> {
-                new OrderedProductsModel { Name = "Americano", Quantity = 3, Price = "$5" },
-                new OrderedProductsModel { Name = "Café affogato", Quantity = 2, Price = "$6" },
-                new OrderedProductsModel { Name = "Espresso", Quantity = 1, Price = "$3" },
-                new OrderedProductsModel { Name = "Ristretto", Quantity = 4, Price = "$4" }
-            };
-
-            OrderList.Add(new OrdersModel { TableNum = 9, Payed = "Not Payed", PaymentMethod = "Cash", Price = "$15", Products = vmi });
         }
 
 

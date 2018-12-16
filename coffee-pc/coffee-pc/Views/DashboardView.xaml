@@ -201,9 +201,9 @@
                                         <ColumnDefinition Width="6*"/>
                                         <ColumnDefinition Width="11*"/>
                                     </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="{Binding TableNum}" FontWeight="Bold" FontSize="70" Grid.RowSpan="2" />
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding Payed}" Grid.Row="0" Grid.Column="1"  FontSize="30"/>
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding PaymentMethod}" Grid.Row="1" Grid.Column="1"  FontSize="30"/>
+                                        <TextBlock Grid.Column="0" Text="{Binding tableNum}" FontWeight="Bold" FontSize="70" Grid.RowSpan="2" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding payed}" Grid.Row="0" Grid.Column="1"  FontSize="30"/>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding paymentMethod}" Grid.Row="1" Grid.Column="1"  FontSize="30"/>
 
                                     </Grid>
 
@@ -216,7 +216,7 @@
                                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                          >
 
-                                            <ListView ItemsSource="{Binding Products}" HorizontalContentAlignment="Stretch">
+                                            <ListView ItemsSource="{Binding products}" HorizontalContentAlignment="Stretch">
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate>
                                                         <Grid>
@@ -227,10 +227,10 @@
                                                             <ColumnDefinition Width="2*"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="0" Text="{Binding Name}" FontWeight="Bold" FontSize="20"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="0" Text="{Binding name}" FontWeight="Bold" FontSize="20"/>
                                                             <TextBlock VerticalAlignment="Center" Grid.Column="1" Text="quantity:" FontStyle="Italic"/>
-                                                                <TextBlock Margin="10,1,1,1" VerticalAlignment="Center" Grid.Column="2" Text="{Binding Quantity}" FontWeight="Bold" FontSize="20"/>
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" Text="{Binding Price}" FontWeight="Bold" FontSize="25"/>
+                                                                <TextBlock Margin="10,1,1,1" VerticalAlignment="Center" Grid.Column="2" Text="{Binding quantity}" FontWeight="Bold" FontSize="20"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" Text="{Binding price}" FontWeight="Bold" FontSize="25"/>
                                                         </Grid>
                                                         </DataTemplate>
                                                 </ListView.ItemTemplate>
@@ -240,8 +240,8 @@
                                 </StackPanel>
 
 
-                                <TextBlock VerticalAlignment="Center" Grid.Column="3" FontWeight="Bold" FontSize="50" >$25</TextBlock>
-                                <Button Grid.Column="5"  Style="{StaticResource MaterialDesignToolButton}"
+                                    <TextBlock VerticalAlignment="Center" Grid.Column="3" FontWeight="Bold" FontSize="50" Text="{Binding totalPrice}"/>
+                                    <Button Grid.Column="5"  Style="{StaticResource MaterialDesignToolButton}"
                                             cal:Message.Attach="[Event Click] = [Action RefusedBtn]"
                             
                                         ToolTip="Refused">
@@ -257,5 +257,16 @@
                
             </Grid>
         </Grid>
+
+        <materialDesign:DialogHost
+            IsOpen="{Binding IsDialogOpen}"
+             Margin="2,0,-2,0">
+            <materialDesign:DialogHost.DialogContent >
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+         Value="0" IsIndeterminate="True" Height="24" Width="24" />
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+
     </Grid>
 </UserControl>

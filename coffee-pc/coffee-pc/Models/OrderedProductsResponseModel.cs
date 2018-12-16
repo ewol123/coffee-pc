@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class OrderedProductsModel
+    class OrderedProductsResponseModel
     {
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public string Price { get; set; }
+        public string name { get; set; }
+        public int quantity { get; set; }
+        public string price { get; set; }
 
     }
 }

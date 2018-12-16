@@ -23,11 +23,11 @@ namespace coffee_pc.ViewModels
         LoginRepository loginRepo = new LoginRepository();
         private string _email;
         public string Password { private get; set; }
-        private bool _IsDialogOpen;
+        private bool _isDialogOpen;
         public bool IsDialogOpen
         {
-            get => _IsDialogOpen;
-            set => Set(ref _IsDialogOpen, value);
+            get => _isDialogOpen;
+            set => Set(ref _isDialogOpen, value);
         }
 
         public LoginViewModel()

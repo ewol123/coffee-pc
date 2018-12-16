@@ -1,4 +1,6 @@
-﻿using coffee_pc.Service;
+﻿using Caliburn.Micro;
+using coffee_pc.Models;
+using coffee_pc.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +9,14 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Data
 {
-    class RegisterRepository
+    class DashboardRepository
     {
-
-
         MainService ms = new MainService();
 
-        public async Task<bool> Register(String email, String password, String confirmPassword)
+        public async Task<List<OrdersResponseModel>> GetOrders()
         {
-
-            bool res = await ms.RequestRegisterAsync(email, password,confirmPassword);
-
+            var res = await ms.GetPlacedOrders();
+          
             return res;
 
         }

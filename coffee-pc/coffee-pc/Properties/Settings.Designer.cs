@@ -34,5 +34,14 @@ namespace coffee_pc.Properties {
                 this["token"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("24e5a184d2b1488c8dc97587625260fb")]
+        public string clientId {
+            get {
+                return ((string)(this["clientId"]));
+            }
+        }
     }
 }
