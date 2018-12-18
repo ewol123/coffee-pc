@@ -18,7 +18,12 @@ namespace coffee_pc.Data
             var res = await ms.GetPlacedOrders();
           
             return res;
+        }
 
+        public async Task<bool> FinalizeOrder(int id, string status)
+        {
+            var res = await ms.FinalizeOrder(id,status);
+            return res;
         }
     }
 }

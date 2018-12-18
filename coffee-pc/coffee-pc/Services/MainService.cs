@@ -65,7 +65,6 @@ namespace coffee_pc.Service
         }
 
         public async Task<List<OrdersResponseModel>> GetPlacedOrders() {
-
             try
             {
                 System.Diagnostics.Debug.WriteLine(token);
@@ -84,9 +83,30 @@ namespace coffee_pc.Service
                 System.Diagnostics.Debug.WriteLine(ex);
                 return null;
             }
-
-
         }
+
+        public async Task<bool> FinalizeOrder(int id, string status) {
+            try
+            {
+                var res = await BASE_URL
+                    .AppendPathSegment("/api/orders/finalizeOrder")
+                    .WithOAuthBearerToken(token)
+                    .PutJsonAsync(new
+                    {
+                        Id = id,
+                        Status = status,
+                    });
+
+                return res.IsSuccessStatusCode;
+
+            }
+            catch (FlurlHttpException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return false;
+            }
+        }
+
 
     }
 }

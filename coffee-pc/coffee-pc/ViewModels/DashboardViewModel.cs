@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ToastNotifications.Messages;
 
 namespace coffee_pc.ViewModels
 {
@@ -114,22 +115,23 @@ namespace coffee_pc.ViewModels
             ActivateLogin();
         }
 
-        public void CompletedBtn() {
-
-            if (SelectedOrder == null) return;
-
+        public async Task FinalizeOrder()
+        {
+            if (SelectedOrder != null)
+            { 
+            var res = await dashboardRepo.FinalizeOrder(SelectedOrder.id, "completed");
+            if (!res) Toast.ProvideToast().ShowError("Can't finalize order");
+            }
         }
 
-        public void RefusedBtn() {
-            if (SelectedOrder == null) return;
+        public async Task RefuseOrder() {
+            if (SelectedOrder != null)
+            {
+                var res = await dashboardRepo.FinalizeOrder(SelectedOrder.id, "refused");
+                if (!res) Toast.ProvideToast().ShowError("Can't refuse order");
+            }
+            }
 
-
-
-        }
-
-
-        public void DummyDataAdd() {
-        }
 
 
     }

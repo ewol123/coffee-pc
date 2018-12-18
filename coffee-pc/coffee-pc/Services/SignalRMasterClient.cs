@@ -27,6 +27,14 @@ namespace coffee_pc.Services
                 MethodToCall = method;
                 MethodToCall();
             });
+
+            Hub.On<string>("ordersFinalize", (message) =>
+            {
+                System.Diagnostics.Debug.WriteLine("Order finalized/refused...");
+                MethodToCall = method;
+                MethodToCall();
+            });
+
         }
 
         public void Stop()

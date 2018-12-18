@@ -140,11 +140,7 @@
                     x:Name="ButtonOpenIsVisible" Visibility="{Binding OpenVisible}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
                     <materialDesign:PackIcon Kind="Menu" Foreground="#FF3580BF"/>
                 </Button>
-                <Button 
-                    x:Name="DummyDataAdd" Visibility="{Binding OpenVisible}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5">
-                    <materialDesign:PackIcon Kind="Add" Foreground="#FF3580BF"/>
-                </Button>
-
+        
 
                 <ListView SelectedItem="{Binding Path=SelectedOrder, Mode=OneWayToSource}" x:Name="OrderList" Margin="10" Grid.Row="1" VerticalAlignment="Top"  Grid.Column="0" Grid.ColumnSpan="3"  HorizontalContentAlignment="Stretch">
                     <ListView.RenderTransform>
@@ -185,7 +181,7 @@
 
                                 </Grid.ColumnDefinitions>
                                     <Button Grid.Column="0"  Style="{StaticResource MaterialDesignToolButton}"
-                                            cal:Message.Attach="[Event Click] = [Action CompletedBtn]"
+                                        cal:Message.Attach="[Event Click] = [Action FinalizeOrder]"
                                           ToolTip="Completed">
                                     <materialDesign:PackIcon Kind="Check" Height="24" Width="24" />
                                      
@@ -242,8 +238,7 @@
 
                                     <TextBlock VerticalAlignment="Center" Grid.Column="3" FontWeight="Bold" FontSize="50" Text="{Binding totalPrice}"/>
                                     <Button Grid.Column="5"  Style="{StaticResource MaterialDesignToolButton}"
-                                            cal:Message.Attach="[Event Click] = [Action RefusedBtn]"
-                            
+                                        cal:Message.Attach="[Event Click] = [Action RefuseOrder]"
                                         ToolTip="Refused">
                                     <materialDesign:PackIcon Kind="DeleteForever" Height="24" Width="24" />
                                       
