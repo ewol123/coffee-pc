@@ -20,7 +20,7 @@ namespace coffee_pc.ViewModels
             else
                 ActivateItem(new DashboardViewModel());
         }
-
+        
         public void close_program() {
             TryClose();
         }

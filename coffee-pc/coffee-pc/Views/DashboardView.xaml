@@ -29,6 +29,11 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-250"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="home">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-250"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-250"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="logout">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-250"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-250"/>
@@ -78,7 +83,25 @@
                 <Image  Source="/coffee-pc;component/Assets/logov2.png"></Image>
             </StackPanel>
             <ListView>
-                <ListViewItem x:Name="manage" Height="60" RenderTransformOrigin="0.5,0.5">
+                <ListViewItem
+                    cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action OpenOrders]"
+                     x:Name="home" Height="60" RenderTransformOrigin="0.5,0.5">
+                    <ListViewItem.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ListViewItem.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                        <materialDesign:PackIcon Kind="Home" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+                        <TextBlock Text="Orders" Margin="10" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem
+                    cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action OpenManagement]"
+                   x:Name="manage" Height="60" RenderTransformOrigin="0.5,0.5">
                     <ListViewItem.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -129,6 +152,9 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+             <ProgressBar Grid.Row="0" Grid.Column="3" Style="{StaticResource MaterialDesignCircularProgressBar}"
+         Value="{Binding ProgressBarVal}" IsIndeterminate="True" Height="24" Width="24" />
+                
 
                 <Button
                     cal:Message.Attach="[Event Click] = [Action ButtonClose]"
@@ -142,7 +168,7 @@
                 </Button>
         
 
-                <ListView SelectedItem="{Binding Path=SelectedOrder, Mode=OneWayToSource}" x:Name="OrderList" Margin="10" Grid.Row="1" VerticalAlignment="Top"  Grid.Column="0" Grid.ColumnSpan="3"  HorizontalContentAlignment="Stretch">
+                <ListView Visibility="{Binding OrdersVisible}" SelectedItem="{Binding Path=SelectedOrder, Mode=OneWayToSource}" x:Name="OrderList" Margin="10" Grid.Row="1" VerticalAlignment="Top"  Grid.Column="0" Grid.ColumnSpan="3"  HorizontalContentAlignment="Stretch">
                     <ListView.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -249,18 +275,63 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-               
-            </Grid>
-        </Grid>
+                <DataGrid
+                      Visibility="{Binding AdminGridVisible}"
+                      Grid.Row="1"
+                    VerticalAlignment="Top"
+                    Grid.Column="0" 
+                    Grid.ColumnSpan="3"  
+                    HorizontalContentAlignment="Stretch"
+                      Margin="0 8 0 0"
+                      ItemsSource="{Binding Items3}"
+                      CanUserSortColumns="True"
+                      CanUserAddRows="False"
+                      AutoGenerateColumns="False"
+                      materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+                      materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+                                        <DataGrid.Columns>
+                        <materialDesign:MaterialDataGridTextColumn
+                          Binding="{Binding Code}"
+                          Header="Email"
+                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+                                            <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
+                                            <materialDesign:MaterialDataGridTextColumn
+                          Binding="{Binding Name}"
+                          Header="Email confirmed"
+                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
+                                            <!-- set a max length to get an indicator in the editor -->
+                                            <materialDesign:MaterialDataGridTextColumn
+                          Binding="{Binding Description}"
+                          Header="Lockout enabled"
+                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
+                                            <materialDesign:MaterialDataGridTextColumn
+                          Binding="{Binding Numeric}"
+                          Header="Lockout date"
+                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                                       
+                                            </materialDesign:MaterialDataGridTextColumn>
+                                          
+                          <materialDesign:MaterialDataGridComboBoxColumn
+                          Header="Roles"
+                          SelectedValueBinding="{Binding Food}"
+                          ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}" />
 
-        <materialDesign:DialogHost
-            IsOpen="{Binding IsDialogOpen}"
-             Margin="2,0,-2,0">
-            <materialDesign:DialogHost.DialogContent >
-                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-         Value="0" IsIndeterminate="True" Height="24" Width="24" />
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
+                        <materialDesign:MaterialDataGridComboBoxColumn
+                          Header="Add to roles"
+                          SelectedValueBinding="{Binding Food}"
+                          ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}" />
+
+                        <materialDesign:MaterialDataGridComboBoxColumn
+                          Header="Remove from role"
+                          SelectedValueBinding="{Binding Food}"
+                          ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+
+        
+        </Grid>
 
 
     </Grid>

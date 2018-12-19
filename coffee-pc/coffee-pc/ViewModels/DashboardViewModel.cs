@@ -22,33 +22,73 @@ namespace coffee_pc.ViewModels
         private BindableCollection<OrdersResponseModel> _orders = new BindableCollection<OrdersResponseModel>();
         private OrdersResponseModel _selectedOrder;
         private DashboardRepository dashboardRepo = new DashboardRepository();
-        private bool _isDialogOpen;
-        private TableWatcher watcher = new TableWatcher();
-
+        private Visibility _ordersVisible { get; set; }
+        private Visibility _adminGridVisible { get; set; }
+        private string _progressBarVal { get; set; }
         public DashboardViewModel()
         {
+            AdminGridVisible = Visibility.Collapsed;
+            ProgressBarVal = "100";
             GetOrders();
-            var client = new SignalRMasterClient("http://localhost:5819/signalr",()=>GetOrders());
+            var client = new SignalRMasterClient("http://localhost:5819/signalr", () => GetOrders());
+
+            OrdersVisible = Visibility.Visible;
+        }
+
+
+
+        public void OpenManagement() {
+            OrdersVisible = Visibility.Collapsed;
+            AdminGridVisible = Visibility.Visible;
+        }
+
+        public void OpenOrders() {
+            AdminGridVisible = Visibility.Collapsed;
+            OrdersVisible = Visibility.Visible;
         }
 
         public async Task GetOrders()
         {
             System.Diagnostics.Debug.WriteLine("BuildViewModelAsync");
-            //IsDialogOpen = true;
+            ProgressBarVal = "0";
             List<OrdersResponseModel> Orders = await dashboardRepo.GetOrders();
-            _orders.Clear();
+            OrderList.Clear();
             foreach (var o in Orders)
             {
-                _orders.Add(o);
+                OrderList.Add(o);
             }
-            //IsDialogOpen = false;
+            ProgressBarVal = "100";
         }
 
-        public bool IsDialogOpen
+
+        public string ProgressBarVal
         {
-            get => _isDialogOpen;
-            set => Set(ref _isDialogOpen, value);
+            get { return _progressBarVal; }
+            set {
+                _progressBarVal = value;
+                NotifyOfPropertyChange(() => ProgressBarVal);
+                }
         }
+
+        public Visibility OrdersVisible
+        {
+            get { return _ordersVisible; }
+            set {
+                _ordersVisible = value;
+                NotifyOfPropertyChange(() => OrdersVisible);
+             }
+        }
+
+        public Visibility AdminGridVisible
+        {
+            get { return _adminGridVisible; }
+            set
+            {
+                _adminGridVisible = value;
+                NotifyOfPropertyChange(() => AdminGridVisible);
+            }
+        }
+
 
         public OrdersResponseModel SelectedOrder
         {
@@ -118,16 +158,20 @@ namespace coffee_pc.ViewModels
         public async Task FinalizeOrder()
         {
             if (SelectedOrder != null)
-            { 
-            var res = await dashboardRepo.FinalizeOrder(SelectedOrder.id, "completed");
-            if (!res) Toast.ProvideToast().ShowError("Can't finalize order");
+            {
+                ProgressBarVal = "0";
+                var res = await dashboardRepo.FinalizeOrder(SelectedOrder.id, "completed");
+                ProgressBarVal = "100";
+                if (!res) Toast.ProvideToast().ShowError("Can't finalize order");
             }
         }
 
         public async Task RefuseOrder() {
             if (SelectedOrder != null)
             {
+                ProgressBarVal = "0";
                 var res = await dashboardRepo.FinalizeOrder(SelectedOrder.id, "refused");
+                ProgressBarVal = "100";
                 if (!res) Toast.ProvideToast().ShowError("Can't refuse order");
             }
             }
