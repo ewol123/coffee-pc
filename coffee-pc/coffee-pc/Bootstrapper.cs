@@ -19,5 +19,12 @@ namespace coffee_pc
         protected override void OnStartup(object sender, StartupEventArgs e) {
             DisplayRootViewFor<ShellViewModel>();
         }
+
+        protected override void OnExit(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.token = "";
+            Properties.Settings.Default.Save();
+
+        }
     }
 }

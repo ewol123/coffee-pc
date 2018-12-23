@@ -16,25 +16,7 @@ namespace coffee_pc.Services
 
         public SignalRMasterClient(string url, Action method)
         {
-            Url = url;
-            Connection = new HubConnection(url, useDefaultUrl: false);
-            Hub = Connection.CreateHubProxy("ServiceStatusHub");
-            Connection.Start().Wait();
-
-            Hub.On<string>("ordersPlaced", (message) =>
-            {
-                System.Diagnostics.Debug.WriteLine("Order placed...");
-                MethodToCall = method;
-                MethodToCall();
-            });
-
-            Hub.On<string>("ordersFinalize", (message) =>
-            {
-                System.Diagnostics.Debug.WriteLine("Order finalized/refused...");
-                MethodToCall = method;
-                MethodToCall();
-            });
-
+            Connect(url,method);
         }
 
         public void Stop()
@@ -42,5 +24,36 @@ namespace coffee_pc.Services
             Connection.Stop();
         }
 
+        public void Connect(string url, Action method)
+        {
+            try
+            {
+                Url = url;
+                Connection = new HubConnection(url, useDefaultUrl: false);
+                Hub = Connection.CreateHubProxy("ServiceStatusHub");
+                Connection.Start().Wait();
+                Hub.On<string>("ordersPlaced", (message) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("Order placed...");
+                    MethodToCall = method;
+                    MethodToCall();
+                });
+
+                Hub.On<string>("ordersFinalize", (message) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("Order finalized/refused...");
+                    MethodToCall = method;
+                    MethodToCall();
+                });
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Can't connect to server");
+                Connect(url,method);
+            }
+
+        }
+
+       
     }
 }

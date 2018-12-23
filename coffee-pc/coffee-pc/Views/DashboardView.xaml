@@ -166,7 +166,6 @@
                     x:Name="ButtonOpenIsVisible" Visibility="{Binding OpenVisible}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
                     <materialDesign:PackIcon Kind="Menu" Foreground="#FF3580BF"/>
                 </Button>
-        
 
                 <ListView Visibility="{Binding OrdersVisible}" SelectedItem="{Binding Path=SelectedOrder, Mode=OneWayToSource}" x:Name="OrderList" Margin="10" Grid.Row="1" VerticalAlignment="Top"  Grid.Column="0" Grid.ColumnSpan="3"  HorizontalContentAlignment="Stretch">
                     <ListView.RenderTransform>
@@ -283,29 +282,31 @@
                     Grid.ColumnSpan="3"  
                     HorizontalContentAlignment="Stretch"
                       Margin="0 8 0 0"
-                      ItemsSource="{Binding Items3}"
+                      ItemsSource="{Binding UserList}"
                       CanUserSortColumns="True"
                       CanUserAddRows="False"
                       AutoGenerateColumns="False"
+                      SelectedItem="{Binding SelectedUser}"
                       materialDesign:DataGridAssist.CellPadding="13 8 8 8"
                       materialDesign:DataGridAssist.ColumnHeaderPadding="8">
                                         <DataGrid.Columns>
+           
                         <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding Code}"
+                          Binding="{Binding Email}"
                           Header="Email"
                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
                                             <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
                                             <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding Name}"
+                          Binding="{Binding EmailConfirmed}"
                           Header="Email confirmed"
                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
                                             <!-- set a max length to get an indicator in the editor -->
                                             <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding Description}"
+                          Binding="{Binding LockoutEnabled}"
                           Header="Lockout enabled"
                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
                                             <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding Numeric}"
+                          Binding="{Binding LockoutDate}"
                           Header="Lockout date"
                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
                                        
@@ -313,24 +314,85 @@
                                           
                           <materialDesign:MaterialDataGridComboBoxColumn
                           Header="Roles"
-                          SelectedValueBinding="{Binding Food}"
-                          ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}" />
+                          ItemsSourceBinding="{Binding Roles}" />
+                        <DataGridTemplateColumn
+                            Header="Manage Roles">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                 
+                                    ToolTip="Manage Roles"
+                                        cal:Message.Attach="[Event Click] = [Action OpenRoleSelector]"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="30" Height="30" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
+                                        <materialDesign:PackIcon Kind="Settings" Foreground="#FF3580BF"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                        <materialDesign:MaterialDataGridComboBoxColumn
-                          Header="Add to roles"
-                          SelectedValueBinding="{Binding Food}"
-                          ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}" />
-
-                        <materialDesign:MaterialDataGridComboBoxColumn
-                          Header="Remove from role"
-                          SelectedValueBinding="{Binding Food}"
-                          ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}" />
+                     
                     </DataGrid.Columns>
                 </DataGrid>
 
-            </Grid>
 
-        
+                <materialDesign:DialogHost
+            IsOpen="{Binding IsSelectRoleOpen}"
+             Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="2,0,-2,0">
+                    <materialDesign:DialogHost.DialogContent >
+                        <Grid
+                            Width="200">
+                            
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox
+                                Grid.Row="0"
+                                Grid.ColumnSpan="3"
+                              ItemsSource="{Binding RoleList}"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedRole}">
+                                
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </ComboBox>
+
+                            <Button 
+                                cal:Message.Attach="[Event Click] = [Action CancelRole]"
+                                HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0"  Style="{StaticResource MaterialDesignToolButton}"
+                                        ToolTip="Cancel">
+                                <materialDesign:PackIcon Kind="Cancel" Height="24" Width="24" />
+                            </Button>
+
+                            <Button 
+                                cal:Message.Attach="[Event Click] = [Action RemoveRole]"
+                                HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1"  Style="{StaticResource MaterialDesignToolButton}"
+                                        ToolTip="Remove from Role">
+                                <materialDesign:PackIcon Kind="Delete" Height="24" Width="24" />
+                            </Button>
+
+
+                            <Button 
+                                cal:Message.Attach="[Event Click] = [Action SaveRole]"
+                                HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2"  Style="{StaticResource MaterialDesignToolButton}"
+                                        ToolTip="Add to Role">
+                                <materialDesign:PackIcon Kind="ContentSave" Height="24" Width="24" />
+                            </Button>
+
+                        </Grid>
+                    </materialDesign:DialogHost.DialogContent>
+                </materialDesign:DialogHost>
+            </Grid>
         </Grid>
 
 

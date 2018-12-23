@@ -19,27 +19,34 @@ namespace coffee_pc.ViewModels
     {
         private Visibility _closeVisible = Visibility.Collapsed;
         private Visibility _openVisible;
+        private Visibility _roleBtnsVisible = Visibility.Collapsed;
+        private bool _isSelectRoleOpen = false;
         private BindableCollection<OrdersResponseModel> _orders = new BindableCollection<OrdersResponseModel>();
-        private OrdersResponseModel _selectedOrder;
+        private BindableCollection<UsersResponseModel> _users = new BindableCollection<UsersResponseModel>();
+        private BindableCollection<RoleResponseModel> _roles = new BindableCollection<RoleResponseModel>();
+        private OrdersResponseModel _selectedOrder { get; set; }
+        private UsersResponseModel _selectedUser { get; set; }
         private DashboardRepository dashboardRepo = new DashboardRepository();
         private Visibility _ordersVisible { get; set; }
         private Visibility _adminGridVisible { get; set; }
         private string _progressBarVal { get; set; }
+        private string _selectedRole { get; set; }
+
         public DashboardViewModel()
         {
             AdminGridVisible = Visibility.Collapsed;
             ProgressBarVal = "100";
             GetOrders();
             var client = new SignalRMasterClient("http://localhost:5819/signalr", () => GetOrders());
-
             OrdersVisible = Visibility.Visible;
         }
 
 
 
-        public void OpenManagement() {
+        public async Task OpenManagement() {
             OrdersVisible = Visibility.Collapsed;
             AdminGridVisible = Visibility.Visible;
+           await GetUsers();
         }
 
         public void OpenOrders() {
@@ -61,13 +68,74 @@ namespace coffee_pc.ViewModels
         }
 
 
+        public async Task GetUsers()
+        {
+            try { 
+            ProgressBarVal = "0";
+            List<UsersResponseModel> Users = await dashboardRepo.GetUsers();
+            UserList.Clear();
+            foreach (var u in Users)
+            {
+                UserList.Add(u);
+            }
+            ProgressBarVal = "100";
+            }
+            catch (Exception e) {
+
+                ProgressBarVal = "100";
+                Toast.ProvideToast().ShowError("Can't load users");
+            }
+        }
+
+        public async Task GetRoles()
+        {
+            try
+            {
+                List<RoleResponseModel> Roles = await dashboardRepo.GetRoles();
+                RoleList.Clear();
+
+                foreach(var r in Roles)
+                { 
+                    RoleList.Add(r);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Toast.ProvideToast().ShowError("Can't load roles");
+            }
+        }
+
+        public string SelectedRole
+        {
+            get { return _selectedRole; }
+            set
+            {
+                _selectedRole = value;
+                NotifyOfPropertyChange(() => SelectedRole);
+            }
+        }
+
+
+
         public string ProgressBarVal
         {
             get { return _progressBarVal; }
             set {
                 _progressBarVal = value;
                 NotifyOfPropertyChange(() => ProgressBarVal);
-                }
+            }
+        }
+
+
+        public Visibility RoleBtnsVisible
+        {
+            get { return _roleBtnsVisible; }
+            set
+            {
+                _roleBtnsVisible = value;
+                NotifyOfPropertyChange(() => RoleBtnsVisible);
+            }
         }
 
         public Visibility OrdersVisible
@@ -76,7 +144,7 @@ namespace coffee_pc.ViewModels
             set {
                 _ordersVisible = value;
                 NotifyOfPropertyChange(() => OrdersVisible);
-             }
+            }
         }
 
         public Visibility AdminGridVisible
@@ -89,6 +157,7 @@ namespace coffee_pc.ViewModels
             }
         }
 
+       
 
         public OrdersResponseModel SelectedOrder
         {
@@ -98,6 +167,18 @@ namespace coffee_pc.ViewModels
                 _selectedOrder = value;
                 NotifyOfPropertyChange(() => SelectedOrder);
             }
+        }
+
+        public UsersResponseModel SelectedUser {
+
+            get { return _selectedUser; }
+
+            set
+            {
+                _selectedUser = value;
+                NotifyOfPropertyChange(() => SelectedUser);
+            }
+
         }
 
 
@@ -122,6 +203,16 @@ namespace coffee_pc.ViewModels
             }
         }
 
+        public bool IsSelectRoleOpen
+        {
+            get { return _isSelectRoleOpen; }
+            set
+            {
+                _isSelectRoleOpen = value;
+                NotifyOfPropertyChange(() => IsSelectRoleOpen);
+            }
+        }
+
         public BindableCollection<OrdersResponseModel> OrderList
         {
             get { return _orders; }
@@ -132,6 +223,26 @@ namespace coffee_pc.ViewModels
             }
         }
 
+        public BindableCollection<UsersResponseModel> UserList
+        {
+            get { return _users; }
+            set
+            {
+                _users = value;
+                NotifyOfPropertyChange(() => UserList);
+            }
+        }
+
+
+        public BindableCollection<RoleResponseModel> RoleList
+        { 
+            get { return _roles; }
+            set
+            {
+                _roles = value;
+                NotifyOfPropertyChange(() => RoleList);
+            }
+        }
 
         public void ButtonClose() {
             CloseVisible = Visibility.Collapsed;
@@ -176,6 +287,61 @@ namespace coffee_pc.ViewModels
             }
             }
 
+        public async Task SaveRole() {
+            try
+            {
+                var res = await dashboardRepo.ManageUsersInRole(new RoleBindingModel {
+                    Id = SelectedRole,
+                    EnrolledUsers = new List<string> {SelectedUser.Id},
+                    RemovedUsers = new List<string>() });
+
+                if (!res) Toast.ProvideToast().ShowError("Can't add to role");
+                else {
+                    await GetUsers();
+                    IsSelectRoleOpen = false;
+                }
+            }
+            catch (Exception e)
+            {
+                Toast.ProvideToast().ShowError("Can't add to role");
+            }
+        }
+
+
+        public async Task RemoveRole()
+        {
+            try
+            {
+                var res = await dashboardRepo.ManageUsersInRole(new RoleBindingModel
+                {
+                    Id = SelectedRole,
+                    EnrolledUsers = new List<string>(),
+                    RemovedUsers = new List<string> { SelectedUser.Id }
+                });
+
+                if (!res) Toast.ProvideToast().ShowError("Can't delete from role");
+                else
+                {
+                    await GetUsers();
+                    IsSelectRoleOpen = false;
+                }
+            }
+            catch (Exception e)
+            {
+                Toast.ProvideToast().ShowError("Can't delete from role");
+            }
+        }
+
+        public async Task CancelRole() {
+                IsSelectRoleOpen = false;
+        }
+
+        public async Task OpenRoleSelector() {
+            IsSelectRoleOpen = true;
+            await GetRoles();
+        }
+
+   
 
 
     }

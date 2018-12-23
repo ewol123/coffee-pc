@@ -50,6 +50,12 @@ namespace coffee_pc.ViewModels
             }
 
 
+        public void ClearTokenOnExit() {
+            Properties.Settings.Default.token = "";
+            Properties.Settings.Default.Save();
+        }
+
+
 
 
     }

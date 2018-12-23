@@ -85,6 +85,7 @@ namespace coffee_pc.Service
             }
         }
 
+
         public async Task<bool> FinalizeOrder(int id, string status) {
             try
             {
@@ -96,6 +97,67 @@ namespace coffee_pc.Service
                         Id = id,
                         Status = status,
                     });
+
+                return res.IsSuccessStatusCode;
+
+            }
+            catch (FlurlHttpException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return false;
+            }
+        }
+
+        public async Task<List<UsersResponseModel>> GetUsers()
+        {
+            try
+            {
+                var res = await BASE_URL
+                    .AppendPathSegment("/api/accounts/users")
+                    .WithOAuthBearerToken(token)
+                    .GetAsync()
+                    .ReceiveJson<List<UsersResponseModel>>(); ;
+
+                return res;
+            }
+
+            catch (FlurlHttpException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+
+
+        public async Task<List<RoleResponseModel>> GetRoles()
+        {
+            try
+            {
+                var res = await BASE_URL
+                    .AppendPathSegment("/api/roles")
+                    .WithOAuthBearerToken(token)
+                    .GetAsync()
+                    .ReceiveJson<List<RoleResponseModel>>(); ;
+                return res;
+            }
+
+            catch (FlurlHttpException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+
+        public async Task<bool> ManageUsersInRole(RoleBindingModel model)
+        {
+            try
+            {
+                var res = await BASE_URL
+                    .AppendPathSegment("/api/roles/ManageUsersInRole")
+                    .WithOAuthBearerToken(token)
+                    .PostJsonAsync(model);
 
                 return res.IsSuccessStatusCode;
 

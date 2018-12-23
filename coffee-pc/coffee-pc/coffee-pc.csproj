@@ -139,6 +139,9 @@
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\OrderedProductsResponseModel.cs" />
     <Compile Include="Models\OrdersResponseModel.cs" />
+    <Compile Include="Models\RoleBindingModel.cs" />
+    <Compile Include="Models\RoleResponseModel.cs" />
+    <Compile Include="Models\UsersResponseModel.cs" />
     <Compile Include="Services\MainService.cs" />
     <Compile Include="Services\SignalRMasterClient.cs" />
     <Compile Include="Utils\Toast.cs" />
