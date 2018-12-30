@@ -11,10 +11,11 @@ namespace coffee_pc.Models
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        public bool EmailConfirmed { get; set; }
         public bool LockoutEnabled { get; set; }
         public DateTime? LockoutDate { get; set; }
         public BindableCollection<string> Roles { get; set; }
-
+        
     }
+
+
 }

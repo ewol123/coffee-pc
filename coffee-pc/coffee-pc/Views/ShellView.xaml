@@ -12,9 +12,7 @@
         AllowsTransparency="True"
         cal:Message.Attach="[Event MouseDown] = [Action drag]"
         ResizeMode="CanResizeWithGrip"
-        Title="Login" Height="450" Width="800"
-        
-        >
+        Title="Login" Height="450" Width="800">
 
         <Grid>
             <Grid.RowDefinitions>

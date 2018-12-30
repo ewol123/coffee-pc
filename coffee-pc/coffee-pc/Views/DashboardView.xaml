@@ -286,32 +286,22 @@
                       CanUserSortColumns="True"
                       CanUserAddRows="False"
                       AutoGenerateColumns="False"
+                      
                       SelectedItem="{Binding SelectedUser}"
                       materialDesign:DataGridAssist.CellPadding="13 8 8 8"
                       materialDesign:DataGridAssist.ColumnHeaderPadding="8">
                                         <DataGrid.Columns>
            
-                        <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding Email}"
-                          Header="Email"
-                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
-                                            <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
-                                            <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding EmailConfirmed}"
-                          Header="Email confirmed"
-                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
-                                            <!-- set a max length to get an indicator in the editor -->
-                                            <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding LockoutEnabled}"
-                          Header="Lockout enabled"
-                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
-                                            <materialDesign:MaterialDataGridTextColumn
-                          Binding="{Binding LockoutDate}"
-                          Header="Lockout date"
-                          EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                                       
-                                            </materialDesign:MaterialDataGridTextColumn>
-                                          
+                            <DataGridTemplateColumn Header="Email">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                         Text="{Binding Email}"
+                                         
+                                        ></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                           <materialDesign:MaterialDataGridComboBoxColumn
                           Header="Roles"
                           ItemsSourceBinding="{Binding Roles}" />
