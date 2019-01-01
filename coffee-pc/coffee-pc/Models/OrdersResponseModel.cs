@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class OrdersResponseModel
+    public class OrdersResponseModel
     {
         public int id { get; set; }
         public int tableNum { get; set; }

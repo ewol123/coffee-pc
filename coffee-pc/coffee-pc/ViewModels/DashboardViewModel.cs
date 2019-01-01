@@ -14,7 +14,7 @@ using ToastNotifications.Messages;
 
 namespace coffee_pc.ViewModels
 {
-    class DashboardViewModel : Screen
+    public class DashboardViewModel : Screen
 
     {
         private Visibility _closeVisible = Visibility.Collapsed;

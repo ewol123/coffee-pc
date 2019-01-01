@@ -12,7 +12,7 @@ using Flurl.Http;
 
 namespace coffee_pc.Service
 {
-    class MainService
+    public class MainService
     {
         const String BASE_URL = "http://localhost:5819";
         String token = Properties.Settings.Default.token;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class RoleBindingModel
+    public class RoleBindingModel
     {
         public string Id { get; set; }
         public List<string> EnrolledUsers { get; set; }

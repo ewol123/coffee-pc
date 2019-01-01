@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class UsersResponseModel
+    public class UsersResponseModel
     {
         public string Id { get; set; }
         public string Email { get; set; }

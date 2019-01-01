@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class RoleResponseModel
+    public class RoleResponseModel
     {
         public string Id { get; set; }
         public string Name { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace coffee_pc.Models
 {
-    class OrderedProductsResponseModel
+    public class OrderedProductsResponseModel
     {
         public string name { get; set; }
         public int quantity { get; set; }
