@@ -3,11 +3,13 @@ using coffee_pc.Data;
 using coffee_pc.Models;
 using coffee_pc.Services;
 using coffee_pc.Utils;
+using Hangfire;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using ToastNotifications.Messages;
@@ -27,13 +29,16 @@ namespace coffee_pc.ViewModels
         private OrdersResponseModel _selectedOrder { get; set; }
         private UsersResponseModel _selectedUser { get; set; }
         private DashboardRepository dashboardRepo = new DashboardRepository();
+        private LoginRepository loginRepo = new LoginRepository();
         private Visibility _ordersVisible { get; set; }
         private Visibility _adminGridVisible { get; set; }
         private string _progressBarVal { get; set; }
         private string _selectedRole { get; set; }
+        private static readonly System.Timers.Timer _timer = new System.Timers.Timer();
 
         public DashboardViewModel()
         {
+
             AdminGridVisible = Visibility.Collapsed;
             ProgressBarVal = "100";
             GetOrders();
@@ -41,7 +46,7 @@ namespace coffee_pc.ViewModels
             OrdersVisible = Visibility.Visible;
         }
 
-
+    
 
         public async Task OpenManagement() {
             OrdersVisible = Visibility.Collapsed;
@@ -56,7 +61,6 @@ namespace coffee_pc.ViewModels
 
         public async Task GetOrders()
         {
-            System.Diagnostics.Debug.WriteLine("BuildViewModelAsync");
             ProgressBarVal = "0";
             List<OrdersResponseModel> Orders = await dashboardRepo.GetOrders();
             OrderList.Clear();
@@ -262,6 +266,7 @@ namespace coffee_pc.ViewModels
 
         public void ClearToken() {
             Properties.Settings.Default.token = "";
+            Properties.Settings.Default.refresh_token = "";
             Properties.Settings.Default.Save();
             ActivateLogin();
         }

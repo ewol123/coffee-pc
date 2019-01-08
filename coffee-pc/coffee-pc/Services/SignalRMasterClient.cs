@@ -34,21 +34,18 @@ namespace coffee_pc.Services
                 Connection.Start().Wait();
                 Hub.On<string>("ordersPlaced", (message) =>
                 {
-                    System.Diagnostics.Debug.WriteLine("Order placed...");
                     MethodToCall = method;
                     MethodToCall();
                 });
 
                 Hub.On<string>("ordersFinalize", (message) =>
                 {
-                    System.Diagnostics.Debug.WriteLine("Order finalized/refused...");
                     MethodToCall = method;
                     MethodToCall();
                 });
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Can't connect to server");
                 Connect(url,method);
             }
 

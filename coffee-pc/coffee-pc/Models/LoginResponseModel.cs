@@ -11,5 +11,7 @@ namespace coffee_pc.Models
         public String access_token { get; set; }
         public String token_type { get; set; }  
         public int expires_in { get; set; }
+        public String refresh_token { get; set; }
+
     }
 }

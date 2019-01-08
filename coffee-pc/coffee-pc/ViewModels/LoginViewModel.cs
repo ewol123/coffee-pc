@@ -75,8 +75,8 @@ namespace coffee_pc.ViewModels
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine(response.access_token);
                     Properties.Settings.Default.token = response.access_token;
+                    Properties.Settings.Default.refresh_token = response.refresh_token;
                     Properties.Settings.Default.Save();
                     ActivateDashboard();
                 }

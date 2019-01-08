@@ -18,8 +18,6 @@ namespace coffee_pc.Data
             LoginResponseModel res = await ms.RequestLoginAsync(email, password);
 
             return res;
-
-
         }
 
 
